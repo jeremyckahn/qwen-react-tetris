@@ -27,7 +27,8 @@ npm run dev        # http://localhost:5173
 | M              | Mute / unmute                   |
 | Enter          | Start / play again              |
 
-On touch devices a control pad appears (swipe to rotate).
+On touch devices a control pad appears: ◀ ▼ ▶ move (hold to repeat),
+↺ / ↻ rotate, ⬆ hard drop, and HOLD.
 Append `#seed=123` to the URL to pin the 7-bag for a shareable, replayable run.
 
 ## Architecture

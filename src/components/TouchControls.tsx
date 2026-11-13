@@ -8,11 +8,14 @@ export type TouchAction = 'left' | 'right' | 'down' | 'softOff' | 'cw' | 'ccw' |
  */
 export function TouchControls({ onAction }: { onAction: (a: TouchAction) => void }) {
   const timer = useRef<number | null>(null);
+  const repeating = useRef<TouchAction | null>(null);
   const stop = () => {
     if (timer.current !== null) {
       window.clearInterval(timer.current);
       timer.current = null;
     }
+    if (repeating.current === 'down') onAction('softOff'); // release the soft-drop latch
+    repeating.current = null;
   };
   useEffect(() => stop, []);
 
@@ -20,6 +23,7 @@ export function TouchControls({ onAction }: { onAction: (a: TouchAction) => void
     onAction(a);
     stop();
     if (a === 'left' || a === 'right' || a === 'down') {
+      repeating.current = a;
       timer.current = window.setInterval(() => onAction(a), 110);
     }
   };
@@ -46,12 +50,15 @@ export function TouchControls({ onAction }: { onAction: (a: TouchAction) => void
     <div className="touch-controls">
       <div className="touch-row">
         {btn('\u25c0', 'left')}
-        {btn('\u21ba', 'ccw')}
         {btn('\u25bc', 'down')}
+        {btn('\u25b6', 'right')}
+        {btn('\u21ba', 'ccw')}
         {btn('\u21bb', 'cw')}
+      </div>
+      <div className="touch-row touch-row2">
+        {btn('HOLD', 'hold', 'wide')}
         {btn('\u2b06', 'hard')}
       </div>
-      <div className="touch-row touch-row2">{btn('HOLD', 'hold', 'wide')}</div>
     </div>
   );
 }
